@@ -49,6 +49,8 @@ class ProjectController extends Controller
         if ($request->has('technologies')) {
             $project->technologies()->attach($form_data['technologies']);
         }
+
+
         return redirect()->route('admin.projects.index')->with('message', 'Il progetto è stato inserito correttamente');
     }
 
@@ -71,8 +73,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $technologies = Technology::all();
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -89,6 +92,13 @@ class ProjectController extends Controller
         $form_data['slug'] = Project::generateSlug($form_data['title']);
         $project->update($form_data);
 
+
+        if ($request->has('technologies')) {
+            $project->technologies()->sync($request->technologies);
+        } else {
+            $project->technologies()->detach();
+        }
+
         return redirect()->route('admin.projects.index')->with('message', "Il progetto è stato aggiornato con successo");
     }
 
@@ -100,6 +110,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $project->technologies()->detach();
         $project->delete();
         return redirect()->route('admin.projects.index')->with('message', "$project->title è stato cancellato");
     }
