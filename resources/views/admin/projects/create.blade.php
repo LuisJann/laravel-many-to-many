@@ -39,6 +39,18 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div class="mb-3">
+                    <h5>Technologies</h5>
+                    @foreach ($technologies as $technology)
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="technologies[]"
+                                id="technology-{{ $technology->id }}" value="{{ $technology->id }}">
+                            <label for="technology-{{ $technology->id }}"
+                                class="form-check-label">{{ $technology->name }}</label>
+                        </div>
+                    @endforeach
+                </div>
                 <div class="form-group mb-3">
                     <label for="content">Descrizione</label>
                     <textarea name="content" id="content" rows="10"
